@@ -1,0 +1,127 @@
+li {
+    margin-left: 20px;
+}
+
+.mov-details {
+    margin-top: 140px;
+    height: 1300px;
+}
+
+.mov-title {
+    font-family: "Bebas Neue", serif;
+    font-weight: 400;
+    font-style: normal;
+    justify-self: center;
+    color: rgb(231, 81, 81);
+    font-size: 75px;
+}
+
+.mov-tagline {
+    font-family: "Montserrat", serif;
+    color: white;
+    justify-self: center;
+    font-size: 25px;
+}
+
+.mov-details-header {
+    margin-bottom: 50px;
+}
+
+.mov-details-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.mov-poster {
+    width: 400px;
+    grid-column: 1;
+    justify-self: center;
+}
+
+.mov-column-two {
+    grid-column: 2;
+    justify-self: center;
+}
+
+.mov-trailer {
+    display: flex;
+    width: 600px;
+    height: 350px;
+    justify-self: center;
+    margin-top: 50px;
+}
+
+.mov-release-date,
+.mov-runtime,
+.mov-genres,
+.mov-genre-list,
+.mov-genre,
+.mov-languages,
+.mov-lang-list,
+.mov-language {
+    font-family: "Montserrat", serif;
+    color: white;
+    font-size: 20px;
+}
+
+.mov-release-date,
+.mov-runtime,
+.mov-genres,
+.mov-languages {
+    margin-top: 20px;
+}
+
+.return-movies {
+    display: flex;
+    position: fixed;
+    top: 100px;
+    right: 60px;
+    width: 50px;
+    height: 50px;
+    font-size: 60px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    user-select: none;
+    transition: 0.2s;
+}
+
+.return-movies:hover {
+    color: rgb(231, 81, 81);
+}
+
+@media (min-width: 1000px) and (max-width: 1800px) {
+    .details-container {
+        grid-template-columns: 400px auto;
+    }
+
+    .mov-poster {
+        width: 300px;
+    }
+
+    .mov-trailer {
+        width: 400px;
+        height: 250px;
+    }
+
+    .mov-details {
+        height: 1100px;
+    }
+}
+
+@media (max-width: 1000px) {
+    .details-container {
+        grid-template-columns: 400px auto;
+    }
+
+    .mov-poster {
+        width: 300px;
+    }
+
+    .mov-trailer {
+        width: 400px;
+        height: 250px;
+    }
+}

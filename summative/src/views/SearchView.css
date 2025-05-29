@@ -1,0 +1,183 @@
+.search-view-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 1000px;
+    margin-top: 120px;
+    padding: 20px;
+}
+
+.search-movies {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+    width: auto;
+}
+
+.search-mov {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.search-mov-poster {
+    width: 330px;
+    justify-self: center;
+    scale: 0.9;
+    transition: 0.9s;
+    cursor: pointer;
+}
+
+.search-mov-poster:hover {
+    scale: 1;
+}
+
+.search-mov-label {
+    font-size: 30px;
+    width: 350px;
+    font-family: "Bebas Neue", serif;
+    font-weight: 400;
+    font-style: normal;
+    justify-self: center;
+    color: rgb(231, 81, 81);
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.search-buy-button {
+    margin: 10px auto;
+    width: 100px;
+    height: 35px;
+    border-radius: 10px;
+    background-color: rgb(255, 90, 90);
+    border: 2px solid rgb(255, 90, 90);
+    color: white;
+    font-family: "Montserrat", serif;
+    font-weight: 500;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+}
+
+.search-buy-button:hover:enabled {
+    background-color: white;
+    color: rgb(255, 90, 90);
+    border: 2px solid rgb(255, 90, 90);
+}
+
+.search-buy-button:active:enabled {
+    background-color: rgb(255, 190, 190);
+}
+
+.search-buy-button:disabled {
+    background-color: rgb(252, 150, 150);
+    color: white;
+    border: 2px solid rgb(252, 150, 150);
+    cursor: default;
+}
+
+#search-pag {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-self: center;
+    justify-self: center;
+    margin-bottom: 50px;
+}
+
+.active-page-button,
+.active-ten-page-button,
+.inactive-page-button,
+.inactive-ten-page-button {
+    height: 30px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 10px;
+    background-color: rgb(255, 90, 90);
+    border: 2px solid rgb(255, 90, 90);
+    color: white;
+    font-family: "Montserrat", serif;
+    font-weight: 400;
+    font-size: 14px;
+    transition: 0.12s;
+    cursor: pointer;
+}
+
+.active-page-button,
+.inactive-page-button {
+    width: 75px;
+}
+
+.active-ten-page-button,
+.inactive-ten-page-button {
+    width: 50px;
+}
+
+.active-page-button:hover,
+.active-ten-page-button:hover {
+    background-color: white;
+    border: 2px solid rgb(255, 90, 90);
+    color: rgb(255, 90, 90);
+}
+
+.active-page-button:active,
+.active-ten-page-button:active {
+    background-color: rgb(255, 190, 190);
+}
+
+.inactive-page-button,
+.inactive-ten-page-button {
+    background-color: rgb(252, 150, 150);
+    border: 2px solid rgb(252, 150, 150);
+    cursor: default;
+}
+
+.page-counter {
+    color: white;
+    font-family: "Montserrat", serif;
+    text-align: center;
+    font-size: 17px;
+    width: 100px;
+}
+
+.fetching-msg {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: "Montserrat", serif;
+    font-weight: 400;
+    font-style: normal;
+    color: white;
+    font-size: 30px;
+    height: 800px;
+}
+
+@media (min-width: 1000px) and (max-width: 1700px) {
+    .search-movies {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .search-mov-poster {
+        width: 200px;
+    }
+
+    .search-mov-label {
+        width: 250px;
+    }
+}
+
+@media (max-width: 1000px) {
+    .search-movies {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .search-mov-poster {
+        width: 150px;
+    }
+
+    .search-mov-label {
+        width: 200px;
+    }
+}

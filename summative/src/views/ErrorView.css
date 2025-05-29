@@ -1,0 +1,19 @@
+.error {
+    margin-top: 300px;
+    margin-bottom: 650px;
+    display: grid;
+    grid-template-rows: repeat(2, auto);
+    justify-content: center;
+}
+
+.error-msg {
+    color: rgb(240, 117, 117);
+    font-family: "Montserrat", serif;
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.error-img {
+    width: 100px;
+    justify-self: center;
+}

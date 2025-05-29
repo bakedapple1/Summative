@@ -1,0 +1,158 @@
+.settings-container {
+    margin-top: 120px;
+}
+
+.settings-title {
+    color: rgb(255, 90, 90);
+}
+
+.settings-view-container {
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(50, 50, 50);
+    color: white;
+}
+
+.settings-container {
+    margin-top: 140px;
+    margin-bottom: 20px;
+    width: 50vw;
+    max-width: 800px;
+    min-height: 1000px;
+    display: flex;
+    align-self: center;
+    justify-self: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.settings-title {
+    font-family: "Bebas Neue", serif;
+    font-weight: 400;
+    font-style: normal;
+    color: rgb(231, 81, 81);
+    font-size: 60px;
+    margin-bottom: 20px;
+}
+
+.settings-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.set-input-label {
+    font-family: "Montserrat", serif;
+    font-size: 18px;
+    color: white;
+}
+
+.set-input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    background-color: #444;
+    color: white;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.set-input:focus {
+    outline: 2px solid rgb(255, 90, 90);
+    background-color: #555;
+}
+
+.set-email {
+    font-family: "Montserrat", serif;
+    font-size: 18px;
+    color: white;
+    margin-top: 10px;
+}
+
+.set-genre-container {
+    margin-top: 30px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.set-select-label {
+    font-family: "Montserrat", serif;
+    font-size: 28px;
+    margin-bottom: 5px;
+}
+
+.set-subtitle {
+    font-family: "Montserrat", serif;
+    font-size: 16px;
+    color: white;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.set-checkbox-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    width: 100%;
+    justify-items: center;
+}
+
+.set-genres {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    width: 150px;
+    gap: 10px;
+}
+
+.set-genre-labels {
+    font-family: "Montserrat", serif;
+    font-size: 16px;
+    color: white;
+    cursor: pointer;
+}
+
+.set-checkboxes {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    justify-self: right;
+}
+
+.set-save-button {
+    margin-top: 30px;
+    width: 150px;
+    height: 40px;
+    border-radius: 6px;
+    background-color: rgb(255, 90, 90);
+    border: 2px solid rgb(255, 90, 90);
+    color: white;
+    font-family: "Montserrat", serif;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.12s;
+}
+
+.set-save-button:hover {
+    background-color: white;
+    color: rgb(255, 90, 90);
+    border: 2px solid rgb(255, 90, 90);
+}
+
+.set-save-button:active {
+    background-color: rgb(255, 190, 190);
+}
+
+@media (max-width: 1000px) {
+    .settings-container {
+        width: 90vw;
+    }
+
+    .set-checkbox-list {
+        grid-template-columns: 1fr;
+    }
+}

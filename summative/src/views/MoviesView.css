@@ -1,0 +1,16 @@
+.genres {
+    display: grid;
+    grid-template-columns: 500px auto;
+}
+
+@media (min-width: 1000px) and (max-width: 1500px) {
+    .genres {
+        grid-template-columns: 350px auto;
+    }
+}
+
+@media (max-width: 1000px) {
+    .genres {
+        grid-template-columns: 300px auto;
+    }
+}

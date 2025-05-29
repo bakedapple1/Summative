@@ -1,0 +1,53 @@
+.hero {
+    margin: auto;
+    margin-top: 140px;
+    height: auto;
+    width: 90vw;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    user-select: none;
+}
+
+.hero-poster {
+    width: 90vw;
+    margin-top: 1.25vw;
+    align-self: center;
+    justify-self: center;
+    transition: 0.8s;
+}
+
+.hero-label {
+    font-size: 150px;
+    position: absolute;
+    align-self: center;
+    margin-top: 10.5%;
+    z-index: 10;
+    text-shadow:
+        -3px -3px 0 black,
+        3px -3px 0 black,
+        -3px 3px 0 black,
+        3px 3px 0 black;
+}
+
+.hero:hover .hero-poster {
+    margin-top: 0.5vw;
+    width: 95vw;
+    cursor: pointer;
+}
+
+.hero:hover .hero-label {
+    cursor: pointer;
+}
+
+@media (min-width: 1000px) and (max-width: 1500px) {
+    .hero-label {
+        font-size: 100px;
+    }
+}
+
+@media (max-width: 1000px) {
+    .hero-label {
+        font-size: 75px;
+    }
+}

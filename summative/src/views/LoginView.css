@@ -1,0 +1,81 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+label,
+h1 {
+    font-family: "Montserrat", serif;
+}
+
+input {
+    font-size: 15px;
+}
+
+.login {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 60vh;
+}
+
+.login-menu {
+    background-color: #707070;
+    padding: 2rem 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    max-width: 400px;
+    width: 100vw;
+    margin-top: 200px;
+}
+
+.login-label {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+}
+
+.log-input-label {
+    display: block;
+    margin: 0.5rem 0 0.25rem;
+    color: #dddddd;
+    font-size: 18px;
+}
+
+.log-input {
+    width: 100%;
+    padding: 0.6rem;
+    margin-bottom: 0.8rem;
+    border: none;
+    border-radius: 6px;
+    background-color: #444;
+    color: #fff;
+    box-sizing: border-box;
+}
+
+.log-input:focus {
+    outline: 2px solid rgb(255, 90, 90);
+    background-color: #555;
+}
+
+.log-submit-button {
+    margin-top: 20px;
+    width: 400px;
+    height: 40px;
+    border-radius: 6px;
+    background-color: rgb(255, 90, 90);
+    border: 2px solid rgb(255, 90, 90);
+    color: white;
+    transition: 0.12s;
+    font-family: "Montserrat", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.log-submit-button:hover {
+    background-color: white;
+    border: 2px solid rgb(255, 90, 90);
+    color: rgb(255, 90, 90);
+}
