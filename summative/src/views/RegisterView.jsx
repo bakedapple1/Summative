@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'fi rebase/auth';
+import { auth } from '../firebase';
 import { useStoreContext } from "../context";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
