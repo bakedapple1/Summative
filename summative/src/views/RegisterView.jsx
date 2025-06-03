@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'fi rebase/auth';
+import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useStoreContext } from "../context";
 import Header from "../components/Header";
@@ -63,6 +63,31 @@ function RegisterView() {
         }
     }
 
+    async function googleSignIn() {
+        const provider = new GoogleAuthProvider();
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+            const userEmail = user.email;
+
+            if (!userData.has(userEmail)) {
+                const newUserInfo = {
+                    firstName: user.displayName.split(' ')[0],
+                    lastName: user.displayName.split(' ')[1] || '',
+                    email: userEmail,
+                    password: '',
+                    confPass: ''
+                };
+                setUserData((prev) => new Map(prev).set(userEmail, newUserInfo));
+            }
+
+            setCurrentUser(userEmail);
+            navigate(`/movies/genre/${selectedGenre}`);
+        } catch (error) {
+            console.error("Google Sign-In Error:", error);
+        }
+    }
+
     return (
         <div className="register-view">
             <Header />
@@ -97,6 +122,7 @@ function RegisterView() {
                         </div>
                     </div>
                     <input type="submit" form="register-form" value="Register" className="reg-submit-button" id="reg-submit" />
+                    <button onClick={googleSignIn()} className="register-google">Google Sign In</button>
                 </div>
             </div>
             <Footer />
