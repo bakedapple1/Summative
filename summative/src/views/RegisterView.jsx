@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { auth } from '../firebase';
 import { useStoreContext } from "../context";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -63,23 +61,6 @@ function RegisterView() {
         }
     }
 
-    const googleSignIn = async () => {
-        const provider = new GoogleAuthProvider();
-        try {
-            const result = await signInWithPopup(auth, provider);
-            if (userData.has(result.user.email)) {
-                console.log("User already exists in the database.");
-            } else {
-                const newData = new Map();
-                newData.set(userInfo.email, userInfo);
-                setUserData(newData);
-            }
-            console.log("User signed in with Google:", result.user);
-        } catch (error) {
-            console.error("Error signing in with Google:", error);
-        }
-    }
-
     return (
         <div className="register-view">
             <Header />
@@ -114,7 +95,6 @@ function RegisterView() {
                         </div>
                     </div>
                     <input type="submit" form="register-form" value="Register" className="reg-submit-button" id="reg-submit" />
-                    <button onClick={googleSignIn} className="register-google">Google Sign In</button>
                 </div>
             </div>
             <Footer />

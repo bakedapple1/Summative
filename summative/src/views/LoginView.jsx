@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { auth } from '../firebase';
 import { useStoreContext } from "../context";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -11,17 +13,28 @@ function LoginView() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    function checkLogin(event) {
+    async function checkLogin(event) {
         event.preventDefault();
-        const user = userData.get(email);
 
-        if (user && user.password == password) {
-            setCurrentUser(email);
+        try {
+            const result = await signInWithEmailAndPassword(auth, email, password);
+            console.log(result);
+            navigate("/authenticated");
+        } catch (error) {
+            console.error("Login error:", error.message);
+        }
+    }
+
+    const googleSignIn = async () => {
+        const provider = new GoogleAuthProvider();
+        try {
+            const result = await signInWithPopup(auth, provider);
+            setCurrentUser(result.user.email);
+            console.log("User signed in with Google:", result.user);
             alert("Logged in!");
             navigate(`/movies/genre/${selectedGenre}`);
-        } else {
-            alert("Email or password is wrong.");
-            setPassword("");
+        } catch (error) {
+            console.error("Error signing in with Google:", error);
         }
     }
 
@@ -38,6 +51,7 @@ function LoginView() {
                         <input type="password" name="log-pass" id="log-pass" className="log-input" value={password} onChange={(event) => { setPassword(event.target.value) }} />
                         <input type="submit" form="login-form" value="Sign In" className="log-submit-button" id="log-submit" />
                     </form>
+                    <button onClick={googleSignIn} className="register-google">Google Sign In</button>
                 </div>
             </div>
             <Footer />
