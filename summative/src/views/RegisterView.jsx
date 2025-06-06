@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createUserWithEmailAndPassword, updateProfile, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { firestore, auth } from "../firebase";
 import { useStoreContext } from "../context";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -8,7 +11,7 @@ import "./RegisterView.css";
 function RegisterView() {
     const [selectedGenres, setSelectedGenres] = useState(Array(12).fill(false));
     const navigate = useNavigate();
-    const { userData, setUserData, preferredGenres, setPreferredGenres, setCurrentUser, selectedGenre } = useStoreContext();
+    const { setCurrentUser, selectedGenre } = useStoreContext();
     const [userInfo, setUserInfo] = useState({
         firstName: '',
         lastName: '',
@@ -39,27 +42,74 @@ function RegisterView() {
         });
     }
 
-    function createAccount(event) {
+    async function createAccount(event) {
         event.preventDefault();
 
         if (userInfo.password !== userInfo.confPass) {
             alert("Passwords do not match!");
             setUserInfo((prev) => ({ ...prev, password: '', confPass: '' }));
-        } else if (userData.has(userInfo.email)) {
-            alert("This email has already been registered!");
-            setUserInfo((prev) => ({ ...prev, firstName: '', lastName: '', email: '', password: '', confPass: '' }));
-        } else if (selectedGenres.filter(Boolean).length < 5) {
+            return;
+        }
+        if (selectedGenres.filter(Boolean).length < 5) {
             alert("Please select at least 5 genres.");
-        } else {
-            const newData = new Map(userData);
-            newData.set(userInfo.email, userInfo);
-            setUserData(newData);
-            setPreferredGenres([...selectedGenres]);
-            setCurrentUser(userInfo.email);
+            return;
+        }
+        
+        // else {
+        //     const newData = new Map(userData);
+        //     newData.set(userInfo.email, userInfo);
+        //     setUserData(newData);
+        //     setPreferredGenres([...selectedGenres]);
+        //     setCurrentUser(userInfo.email);
+        //     alert("Account successfully created.");
+        //     navigate(`/movies/genre/${selectedGenre}`);
+        // }
+
+        try {
+            const result = await createUserWithEmailAndPassword(auth, userInfo.email, userInfo.password);
+            const data = {preferredGenres: selectedGenres};
+            const docRef = doc(firestore, "users", result.user.uid);
+            await setDoc(docRef, data);
+            await updateProfile(result.user, {
+                displayName: `${userInfo.firstName} ${userInfo.lastName}`
+            });
+            
+            setCurrentUser(result.user);
+            console.log("User registered:", result.user);
             alert("Account successfully created.");
             navigate(`/movies/genre/${selectedGenre}`);
+
+        } catch (error) {
+            console.error("Error code: ", error.code);
+            if (error.code === 'auth/email-already-in-use') {
+                alert("This email has already been registered!");
+                setUserInfo((prev) => ({ ...prev, firstName: '', lastName: '', email: '', password: '', confPass: '' }));
+            } else if (error.code === 'auth/weak-password') {
+                alert("Password must be at least 6 characters long.");
+                setUserInfo((prev) => ({ ...prev, password: '', confPass: '' }));
+            } else if (error.code === 'auth/invalid-email') {
+                alert("Invalid email address.");
+                setUserInfo((prev) => ({ ...prev, email: '' }));
+            } else {
+                console.error("Error creating account:", error);
+                alert("An error occurred while creating your account. Please try again.");
+            }
         }
     }
+
+    const googleRegister = async () => {
+            const provider = new GoogleAuthProvider();
+    
+            try {
+                const result = await signInWithPopup(auth, provider);
+                setCurrentUser(result.user);
+                console.log("User signed in with Google:", result.user);
+                alert("Logged in!");
+                navigate(`/movies/genre/${selectedGenre}`);
+            } catch (error) {
+                console.error("Error signing in with Google:", error);
+            }
+        }
 
     return (
         <div className="register-view">
@@ -95,6 +145,7 @@ function RegisterView() {
                         </div>
                     </div>
                     <input type="submit" form="register-form" value="Register" className="reg-submit-button" id="reg-submit" />
+                    <button onClick={googleRegister} className="register-google">Sign in with Google</button>
                 </div>
             </div>
             <Footer />
