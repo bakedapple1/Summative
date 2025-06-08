@@ -42,6 +42,12 @@ function RegisterView() {
         });
     }
 
+    async function createUserDoc(result) {
+        const data = { preferredGenres: selectedGenres };
+        const docRef = doc(firestore, "users", result.user.email);
+        await setDoc(docRef, data);
+    }
+
     async function createAccount(event) {
         event.preventDefault();
 
@@ -54,35 +60,19 @@ function RegisterView() {
             alert("Please select at least 5 genres.");
             return;
         }
-        
-        // else {
-        //     const newData = new Map(userData);
-        //     newData.set(userInfo.email, userInfo);
-        //     setUserData(newData);
-        //     setPreferredGenres([...selectedGenres]);
-        //     setCurrentUser(userInfo.email);
-        //     alert("Account successfully created.");
-        //     navigate(`/movies/genre/${selectedGenre}`);
-        // }
 
         try {
             const result = await createUserWithEmailAndPassword(auth, userInfo.email, userInfo.password);
-            const data = {preferredGenres: selectedGenres};
-            const docRef = doc(firestore, "users", result.user.uid);
-            await setDoc(docRef, data);
             await updateProfile(result.user, {
                 displayName: `${userInfo.firstName} ${userInfo.lastName}`
             });
-            
+            createUserDoc(result);
             setCurrentUser(result.user);
-            console.log("User registered:", result.user);
             alert("Account successfully created.");
             navigate(`/movies/genre/${selectedGenre}`);
-
         } catch (error) {
-            console.error("Error code: ", error.code);
             if (error.code === 'auth/email-already-in-use') {
-                alert("This email has already been registered!");
+                alert("This email is already registered!");
                 setUserInfo((prev) => ({ ...prev, firstName: '', lastName: '', email: '', password: '', confPass: '' }));
             } else if (error.code === 'auth/weak-password') {
                 alert("Password must be at least 6 characters long.");
@@ -98,18 +88,22 @@ function RegisterView() {
     }
 
     const googleRegister = async () => {
-            const provider = new GoogleAuthProvider();
-    
-            try {
-                const result = await signInWithPopup(auth, provider);
-                setCurrentUser(result.user);
-                console.log("User signed in with Google:", result.user);
-                alert("Logged in!");
-                navigate(`/movies/genre/${selectedGenre}`);
-            } catch (error) {
-                console.error("Error signing in with Google:", error);
-            }
+        const provider = new GoogleAuthProvider();
+
+        if (selectedGenres.filter(Boolean).length < 5) {
+            alert("Please select at least 5 genres.");
+            return;
         }
+
+        try {
+            const result = await signInWithPopup(auth, provider);
+            createUserDoc(result);
+            setCurrentUser(result.user);
+            navigate(`/movies/genre/${selectedGenre}`);
+        } catch (error) {
+            console.error("Error signing in with Google:", error);
+        }
+    }
 
     return (
         <div className="register-view">
@@ -145,7 +139,7 @@ function RegisterView() {
                         </div>
                     </div>
                     <input type="submit" form="register-form" value="Register" className="reg-submit-button" id="reg-submit" />
-                    <button onClick={googleRegister} className="register-google">Sign in with Google</button>
+                    <button onClick={googleRegister} className="google-register">Sign In With Google</button>
                 </div>
             </div>
             <Footer />

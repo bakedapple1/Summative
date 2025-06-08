@@ -1,14 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useStoreContext } from "../context/index.jsx";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { updateProfile } from "firebase/auth";
+import { auth, firestore } from "../firebase";
 import Header from "../components/Header.jsx";
 import Footer from "../components/Footer.jsx";
 import "./SettingsView.css";
 
 function SettingsView() {
-    const { userData, setUserData, currentUser, preferredGenres, setPreferredGenres, setPageNum, setToggleState, setSelectedGenre } = useStoreContext();
+    const { currentUser, setCurrentUser, setPageNum, setToggleState, setSelectedGenre } = useStoreContext();
     const [newFirstName, setNewFirstName] = useState("");
     const [newLastName, setNewLastName] = useState("");
-    const [newPreferredGenres, setnewPreferredGenres] = useState(preferredGenres);
+    const [preferredGenres, setPreferredGenres] = useState([]);
     const [genresArray] = useState([
         { genre: "Action", id: 28 },
         { genre: "Adventure", id: 12 },
@@ -24,33 +27,55 @@ function SettingsView() {
         { genre: "Western", id: 37 }
     ]);
 
-    function updateAccount(event) {
+    useEffect(() => {
+        async function fetchUserData() {
+            const docRef = doc(firestore, "users", currentUser.email);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                setPreferredGenres(docSnap.data().preferredGenres);
+            } else {
+                console.log("No user data found.");
+            }
+        }
+        fetchUserData();
+    }, []);
+
+    async function updateUser() {
+        try {
+            const data = { preferredGenres: preferredGenres };
+            const docRef = doc(firestore, "users", currentUser.email);
+            await setDoc(docRef, data);
+            await updateProfile(currentUser, {
+                displayName: `${newFirstName || currentUser.displayName.split(" ")[0]} ${newLastName || currentUser.displayName.split(" ")[1]}`
+            });
+            await auth.currentUser.reload();
+            setCurrentUser(auth.currentUser);
+        } catch (error) {
+            console.error("Error updating user profile:", error);
+        }
+    }
+
+    async function updateAccount(event) {
         event.preventDefault();
-        console.log(userData);
-        if (newPreferredGenres.filter(Boolean).length < 5) {
+
+        if (preferredGenres.filter(Boolean).length < 5) {
             alert("Please select at least 5 genres.");
         } else {
+            await updateUser();
             alert("Account updated.")
-            setPreferredGenres(newPreferredGenres);
-            setUserData((prev) => {
-                return prev.set(currentUser, {
-                    ...prev.get(currentUser),
-                    firstName: newFirstName || prev.get(currentUser).firstName,
-                    lastName: newLastName || prev.get(currentUser).lastName
-                });
-            });
+            setPageNum(1);
             setNewFirstName("");
             setNewLastName("");
-            setPageNum(1);
             setToggleState(Array(12).fill(false));
             setSelectedGenre("*");
         }
     }
 
     function changePreferences(index) {
-        const newPreferences = [...newPreferredGenres];
+        const newPreferences = [...preferredGenres];
         newPreferences[index] = !newPreferences[index];
-        setnewPreferredGenres(newPreferences);
+        setPreferredGenres(newPreferences);
     }
 
     return (
@@ -59,11 +84,11 @@ function SettingsView() {
             <div className="settings-container">
                 <h1 className="settings-title">Settings</h1>
                 <form className="settings-form" id="settings-form" onSubmit={(event) => { updateAccount(event) }}>
-                    <div className="set-email">{`Email: ${userData.get(currentUser).email}`}</div>
+                    <div className="set-email">{`Email: ${currentUser.email}`}</div>
                     <label htmlFor="set-first-name" className="set-input-label">First Name:</label>
-                    <input type="text" name="set-first-name" className="set-input" id="set-first-name" placeholder={userData.get(currentUser).firstName} value={newFirstName} onChange={(event) => { setNewFirstName(event.target.value) }} />
+                    <input type="text" name="set-first-name" className="set-input" id="set-first-name" placeholder={currentUser.displayName.split(" ")[0]} value={newFirstName} onChange={(event) => { setNewFirstName(event.target.value) }} />
                     <label htmlFor="set-last-name" className="set-input-label">Last Name:</label>
-                    <input type="text" name="set-last-name" className="set-input" id="set-last-name" placeholder={userData.get(currentUser).lastName} value={newLastName} onChange={(event) => { setNewLastName(event.target.value) }} />
+                    <input type="text" name="set-last-name" className="set-input" id="set-last-name" placeholder={currentUser.displayName.split(" ")[1]} value={newLastName} onChange={(event) => { setNewLastName(event.target.value) }} />
                 </form>
 
                 <div className="set-genre-container">
@@ -73,7 +98,7 @@ function SettingsView() {
                         {genresArray.map((genreCheck, index) => (
                             <div className="set-genres" key={`set-check-cont-${genreCheck.id}`}>
                                 <label htmlFor={`check-${genreCheck.id}`} key={`set-label-${genreCheck.id}`} className="set-genre-labels">{genreCheck.genre}</label>
-                                <input checked={newPreferredGenres[index]} type="checkbox" key={`set-check-${genreCheck.id}`} id={`check-${genreCheck.id}`} className="set-checkboxes" onChange={() => changePreferences(index)} />
+                                <input checked={preferredGenres[index] === true} type="checkbox" key={`set-check-${genreCheck.id}`} id={`check-${genreCheck.id}`} className="set-checkboxes" onChange={() => changePreferences(index)} />
                             </div>
                         ))}
                     </div>

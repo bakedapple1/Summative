@@ -60,7 +60,7 @@ function DetailView() {
                         </ul>
                     </div>
                 </div>
-                <iframe className="mov-trailer" src={`https://www.youtube.com/embed/${trailer}`} frameborder="0" allowFullScreen></iframe>
+                <iframe className="mov-trailer" src={`https://www.youtube.com/embed/${trailer}`} allowFullScreen></iframe>
             </div>
             <div className="return-movies" onClick={() => navigate(prevPage)}>&times;</div>
         </>

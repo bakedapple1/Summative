@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { doc, getDoc } from "firebase/firestore";
+import { firestore } from "../firebase";
 import { useStoreContext } from "../context";
 import "./Genres.css";
 
 function Genres() {
     const navigate = useNavigate();
-    const { toggleState, setToggleState, setSelectedGenre, preferredGenres } = useStoreContext();
+    const { currentUser, toggleState, setToggleState, setSelectedGenre } = useStoreContext();
     const [genresArray] = useState([
         { genre: "Action", id: 28 },
         { genre: "Adventure", id: 12 },
@@ -19,14 +21,30 @@ function Genres() {
         { genre: "Sci-Fi", id: 878 },
         { genre: "War", id: 10752 },
         { genre: "Western", id: 37 }
-    ].filter((g, index) => preferredGenres[index]));
+    ]);
+    const [filteredGenres, setFilteredGenres] = useState([]);
+
+    useEffect(() => {
+        async function fetchUserData() {
+            const docRef = doc(firestore, "users", currentUser.email);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                setFilteredGenres(genresArray.filter((g, index) => (docSnap.data().preferredGenres || [])[index]));
+            } else {
+                setFilteredGenres([]);
+                console.log("No user data found.");
+            }
+        }
+        fetchUserData();
+    }, []);
 
     function toggleGenre(buttonIdx) {
-        const newToggleState = Array(genresArray.length).fill(false);
+        const newToggleState = Array(filteredGenres.length).fill(false);
         newToggleState[buttonIdx] = true;
         setToggleState(newToggleState);
 
-        const newSelectedGenre = genresArray[buttonIdx].id;
+        const newSelectedGenre = filteredGenres[buttonIdx].id;
         setSelectedGenre(newSelectedGenre);
         navigate(`/movies/genre/${newSelectedGenre}`);
     }
@@ -35,7 +53,7 @@ function Genres() {
         <div className="genre-container">
             <h1 className="genre-msg">Explore a Genre</h1>
             <div className="genre-select">
-                {genresArray.map((genreSelect, index) => (
+                {filteredGenres.map((genreSelect, index) => (
                     <button key={genreSelect.id} className={toggleState[index] ? "active-genre" : "inactive-genre"} onClick={() => toggleGenre(index)}>
                         {genreSelect.genre}
                     </button>

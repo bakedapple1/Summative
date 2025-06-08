@@ -47,6 +47,7 @@
 }
 
 @media (min-width: 1000px) and (max-width: 1500px) {
+
     .featured-movies,
     .featured-section {
         width: 1000px;
@@ -72,6 +73,7 @@
 }
 
 @media (max-width: 1000px) {
+
     .featured-movies,
     .featured-section {
         width: 500px;

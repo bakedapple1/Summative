@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
-import { doc, setDoc } from "firebase/firestore";
-import { firestore, auth } from '../firebase';
+import { auth } from '../firebase';
 import { useStoreContext } from "../context";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -61,7 +60,7 @@ function LoginView() {
                         <input type="password" name="log-pass" id="log-pass" className="log-input" value={password} onChange={(event) => { setPassword(event.target.value) }} required />
                         <input type="submit" form="login-form" value="Sign In" className="log-submit-button" id="log-submit" />
                     </form>
-                    <button onClick={googleSignIn} className="register-google">Google Sign In</button>
+                    <button onClick={googleSignIn} className="google-signin">Sign In With Google</button>
                 </div>
             </div>
             <Footer />

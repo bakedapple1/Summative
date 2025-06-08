@@ -50,6 +50,7 @@ li {
     height: 350px;
     justify-self: center;
     margin-top: 50px;
+    border: 0px;
 }
 
 .mov-release-date,

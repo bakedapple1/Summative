@@ -57,6 +57,7 @@ input {
     background-color: #555;
 }
 
+.google-signin,
 .log-submit-button {
     margin-top: 20px;
     width: 400px;
@@ -74,6 +75,7 @@ input {
     cursor: pointer;
 }
 
+.google-signin:hover,
 .log-submit-button:hover {
     background-color: white;
     border: 2px solid rgb(255, 90, 90);

@@ -77,7 +77,7 @@ function SearchView() {
                     ))}
                 </div>
             )}
-            <div div className="pagination" id="search-pag" >
+            <div className="pagination" id="search-pag" >
                 <button className={(searchPageNum != 1) ? "active-ten-page-button" : "inactive-ten-page-button"} onClick={() => changePageBy(-10)}>&lt;&lt;</button>
                 <button className={(searchPageNum != 1) ? "active-page-button" : "inactive-page-button"} onClick={() => changePageBy(-1)}>Prev</button>
                 <div className="page-counter" >Page: {searchPageNum}</div>

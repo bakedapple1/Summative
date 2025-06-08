@@ -1,15 +1,23 @@
 import { useNavigate } from "react-router-dom";
+import { getAuth, signOut } from "firebase/auth";
 import { useStoreContext } from "../context";
 import SearchIcon from "../assets/search-icon.png";
 import "./Header.css";
 
 function Header() {
     const navigate = useNavigate();
-    const { userData, currentUser, setCurrentUser, cart, query, setQuery } = useStoreContext();
+    const auth = getAuth();
+    const { currentUser, setCurrentUser, cart, query, setQuery } = useStoreContext();
 
-    function logOut() {
-        setCurrentUser(null);
-        alert("Logged out!");
+    async function logOut() {
+        try {
+            await signOut(auth);
+            setCurrentUser(null);
+            alert("Logged out!");
+        } catch (error) {
+            console.error("Error logging out:", error);
+            alert("Logout failed.");
+        }
     }
 
     function handleSearch(event) {
@@ -33,7 +41,7 @@ function Header() {
 
             {currentUser ? (
                 <div className="logged-in">
-                    <p className="welc-msg">Welcome, {userData.get(currentUser).firstName}!</p>
+                    <p className="welc-msg">Welcome, {currentUser.displayName.split(" ")[0]}!</p>
                     <button className="cart-button" onClick={() => navigate(`/cart`)}>
                         {`Cart (${cart.size > 99 ? '99+' : cart.size})`}
                     </button>
