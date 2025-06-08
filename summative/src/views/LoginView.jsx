@@ -40,7 +40,6 @@ function LoginView() {
             const result = await signInWithPopup(auth, provider);
             setCurrentUser(result.user);
             console.log("User signed in with Google:", result.user);
-            alert("Logged in!");
             navigate(`/movies/genre/${selectedGenre}`);
         } catch (error) {
             console.error("Error signing in with Google:", error);
