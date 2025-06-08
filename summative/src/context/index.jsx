@@ -23,7 +23,6 @@ export const StoreProvider = ({ children }) => {
                 setLoading(false);
             } else {
                 setCurrentUser(null);
-                console.log("No user");
             }
         });
     }, []);

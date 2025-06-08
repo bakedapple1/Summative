@@ -81,7 +81,7 @@ function RegisterView() {
                 alert("Invalid email address.");
                 setUserInfo((prev) => ({ ...prev, email: '' }));
             } else {
-                console.error("Error creating account:", error);
+                console.log("Error creating account:", error);
                 alert("An error occurred while creating your account. Please try again.");
             }
         }
@@ -101,7 +101,7 @@ function RegisterView() {
             setCurrentUser(result.user);
             navigate(`/movies/genre/${selectedGenre}`);
         } catch (error) {
-            console.error("Error signing in with Google:", error);
+            console.log("Error signing in with Google:", error);
         }
     }
 

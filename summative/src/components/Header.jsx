@@ -15,7 +15,7 @@ function Header() {
             setCurrentUser(null);
             alert("Logged out!");
         } catch (error) {
-            console.error("Error logging out:", error);
+            console.log("Error logging out:", error);
             alert("Logout failed.");
         }
     }

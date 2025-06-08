@@ -52,7 +52,7 @@ function SettingsView() {
             await auth.currentUser.reload();
             setCurrentUser(auth.currentUser);
         } catch (error) {
-            console.error("Error updating user profile:", error);
+            console.log("Error updating user profile:", error);
         }
     }
 

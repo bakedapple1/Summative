@@ -18,7 +18,6 @@ function LoginView() {
 
         try {
             const result = await signInWithEmailAndPassword(auth, email, password);
-            console.log(result);
             setCurrentUser(result.user);
             navigate(`/movies/genre/${selectedGenre}`);
         } catch (error) {
@@ -29,7 +28,6 @@ function LoginView() {
                 alert("An error occurred during login. Please try again.");
                 setPassword('');
             }
-            console.log(error.code);
         }
     }
 
@@ -39,10 +37,9 @@ function LoginView() {
         try {
             const result = await signInWithPopup(auth, provider);
             setCurrentUser(result.user);
-            console.log("User signed in with Google:", result.user);
             navigate(`/movies/genre/${selectedGenre}`);
         } catch (error) {
-            console.error("Error signing in with Google:", error);
+            console.log("Error signing in with Google:", error);
         }
     }
 
