@@ -22,6 +22,7 @@ function Header() {
 
     function handleSearch(event) {
         event.preventDefault();
+        console.log(currentUser);
         navigate(`/movies/search`);
     }
 

@@ -35,17 +35,19 @@
     margin-bottom: 20px;
 }
 
+.set-password-container,
 .settings-form {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 10px;
 }
 
 .set-input-label {
     font-family: "Montserrat", serif;
     font-size: 18px;
     color: white;
+    margin-top: 15px;
 }
 
 .set-input {
