@@ -139,7 +139,7 @@ function RegisterView() {
                         </div>
                     </div>
                     <input type="submit" form="register-form" value="Register" className="reg-submit-button" id="reg-submit" />
-                    <button onClick={googleRegister} className="google-register">Sign In With Google</button>
+                    <button onClick={googleRegister} className="google-register">Register With Google</button>
                 </div>
             </div>
             <Footer />

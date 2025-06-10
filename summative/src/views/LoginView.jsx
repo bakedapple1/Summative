@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth'
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, fetchSignInMethodsForEmail } from 'firebase/auth'
 import { auth } from '../firebase';
 import { useStoreContext } from "../context";
 import Header from "../components/Header";
@@ -36,8 +36,15 @@ function LoginView() {
 
         try {
             const result = await signInWithPopup(auth, provider);
-            setCurrentUser(result.user);
-            navigate(`/movies/genre/${selectedGenre}`);
+            const methods = await fetchSignInMethodsForEmail(auth, result.user.email);
+
+            if (methods.length === 0) {
+                await result.user.delete();
+                alert("Please register first before signing in.");
+            } else {
+                setCurrentUser(result.user);
+                navigate(`/movies/genre/${selectedGenre}`);
+            }
         } catch (error) {
             console.log("Error signing in with Google:", error);
         }
