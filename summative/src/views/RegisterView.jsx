@@ -42,8 +42,8 @@ function RegisterView() {
         });
     }
 
-    async function createUserDoc(result) {
-        const data = { preferredGenres: selectedGenres };
+    async function createUserDoc(result, genres) {
+        const data = { preferredGenres: genres };
         const docRef = doc(firestore, "users", result.user.email);
         await setDoc(docRef, data);
     }
@@ -66,7 +66,7 @@ function RegisterView() {
             await updateProfile(result.user, {
                 displayName: `${userInfo.firstName} ${userInfo.lastName}`
             });
-            createUserDoc(result);
+            createUserDoc(result, selectedGenres);
             setCurrentUser(result.user);
             alert("Account successfully created.");
             navigate(`/movies/genre/${selectedGenre}`);
@@ -90,14 +90,9 @@ function RegisterView() {
     const googleRegister = async () => {
         const provider = new GoogleAuthProvider();
 
-        if (selectedGenres.filter(Boolean).length < 5) {
-            alert("Please select at least 5 genres.");
-            return;
-        }
-
         try {
             const result = await signInWithPopup(auth, provider);
-            createUserDoc(result);
+            createUserDoc(result, Array(5).fill(true).concat(Array(7).fill(false)));
             setCurrentUser(result.user);
             navigate(`/movies/genre/${selectedGenre}`);
         } catch (error) {
