@@ -42,7 +42,7 @@ function Header() {
 
             {currentUser ? (
                 <div className="logged-in">
-                    <p className="welc-msg">Welcome, {currentUser.displayName.split(" ")[0]}!</p>
+                    <p className="welc-msg">Welcome, {(currentUser.displayName ? currentUser.displayName.split(" ")[0] : "User")}!</p>
                     <button className="cart-button" onClick={() => navigate(`/cart`)}>
                         {`Cart (${cart.size > 99 ? '99+' : cart.size})`}
                     </button>
