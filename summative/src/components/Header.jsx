@@ -13,6 +13,7 @@ function Header() {
         try {
             await signOut(auth);
             setCurrentUser(null);
+            setQuery("");
             alert("Logged out!");
         } catch (error) {
             console.log("Error logging out:", error);
