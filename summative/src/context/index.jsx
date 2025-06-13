@@ -11,7 +11,6 @@ export const StoreProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [pageNum, setPageNum] = useState(1);
     const [prevPage, setPrevPage] = useState("");
-    const [purchaseHistory, setPurchaseHistory] = useState(Map());
     const [query, setQuery] = useState("");
     const [searchPageNum, setSearchPageNum] = useState(1);
     const [selectedGenre, setSelectedGenre] = useState("*");
@@ -29,7 +28,7 @@ export const StoreProvider = ({ children }) => {
     }, []);
 
     return (
-        <StoreContext.Provider value={{ currentUser, setCurrentUser, toggleState, setToggleState, selectedGenre, setSelectedGenre, pageNum, setPageNum, searchPageNum, setSearchPageNum, cart, setCart, query, setQuery, prevPage, setPrevPage, loading, purchaseHistory, setPurchaseHistory }}>
+        <StoreContext.Provider value={{ currentUser, setCurrentUser, toggleState, setToggleState, selectedGenre, setSelectedGenre, pageNum, setPageNum, searchPageNum, setSearchPageNum, cart, setCart, query, setQuery, prevPage, setPrevPage, loading }}>
             {children}
         </StoreContext.Provider>
     )
