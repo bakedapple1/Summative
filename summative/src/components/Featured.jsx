@@ -3,12 +3,15 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useStoreContext } from "../context";
 import "./Featured.css";
+import { firestore } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 function Featured() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { setPrevPage } = useStoreContext();
+    const { currentUser, setPrevPage, cart, setCart } = useStoreContext();
     const [sixMovies, setSixMovies] = useState([]);
+    const [purchaseHistory, setPurchaseHistory] = useState();
 
     useEffect(() => {
         async function getData() {
@@ -24,6 +27,19 @@ function Featured() {
         getData();
     }, []);
 
+    useEffect(() => {
+        async function getPurchaseHistory() {
+            try {
+                const docRef = doc(firestore, "users", currentUser.email);
+                const docSnap = await getDoc(docRef);
+                setPurchaseHistory(docSnap.data().previousPurchases);
+            } catch (error) {
+                console.log("Error fetching purchase history:", error);
+            }
+        };
+        getPurchaseHistory();
+    }, []);
+
     function navigateTo(page) {
         setPrevPage(location.pathname);
         navigate(page);
@@ -34,9 +50,12 @@ function Featured() {
             <h1 className="featured-header">Featured</h1>
             <div className="featured-movies">
                 {sixMovies && sixMovies.map(movie => (
-                    <div id="mov" className="mov" key={movie.id} onClick={() => navigateTo(`/movies/details/${movie.id}`)}>
-                        <img className="movie-poster" src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={`${movie.id}`} />
+                    <div id="mov" className="mov" key={movie.id}>
+                        <img className="movie-poster" onClick={() => navigateTo(`/movies/details/${movie.id}`)} src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={`${movie.id}`} />
                         <h1 className="mov-label">{`${movie.title}`}</h1>
+                        {currentUser &&
+                            <button className="buy-button" disabled={cart.has(movie.id) || purchaseHistory?.hasOwnProperty(movie.id)} onClick={() => setCart((prevCart) => prevCart.set(movie.id, movie))}>{cart.has(movie.id) ? "Added" : purchaseHistory?.hasOwnProperty(movie.id) ? "Purchased" : "Buy"}</button>
+                        }
                     </div>
                 ))}
             </div>

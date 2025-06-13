@@ -4,21 +4,23 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useStoreContext } from "../context";
 import ImgNotAvail from "../assets/img not avail.png";
 import "./SearchView.css";
+import { doc, getDoc } from "firebase/firestore";
+import { firestore } from "../firebase";
 
 function SearchView() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { searchPageNum, setSearchPageNum, cart, setCart, query, setPrevPage } = useStoreContext();
+    const { currentUser, searchPageNum, setSearchPageNum, cart, setCart, query, setPrevPage } = useStoreContext();
     const [searchRes, setSearchRes] = useState([]);
     const [waitMsg, setWaitMsg] = useState([]);
+    const [purchaseHistory, setPurchaseHistory] = useState();
 
     useEffect(() => {
+        setSearchRes([]);
         if (!query) {
-            setSearchRes([]);
             setWaitMsg(["No results found...", "Please check your search term."]);
             return;
         }
-        setSearchRes([]);
         setWaitMsg(["Fetching Movies..."]);
         const timer = setTimeout(() => {
             async function getData() {
@@ -37,6 +39,18 @@ function SearchView() {
         return () => clearTimeout(timer);
     }, [searchPageNum, query]);
 
+    useEffect(() => {
+        async function getPurchaseHistory() {
+            try {
+                const docRef = doc(firestore, "users", currentUser.email);
+                const docSnap = await getDoc(docRef);
+                setPurchaseHistory(docSnap.data().previousPurchases);
+            } catch (error) {
+                console.log("Error fetching purchase history:", error);
+            }
+        };
+        getPurchaseHistory();
+    }, []);
 
     function changePageBy(changeBy) {
         if (searchPageNum + changeBy < 1) {
@@ -62,7 +76,7 @@ function SearchView() {
                             <div className="search-mov" key={movie.id}>
                                 <img className="search-mov-poster" src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : ImgNotAvail} key={`${movie.id}`} onClick={() => navigateTo(`/movies/details/${movie.id}`)} />
                                 <h1 className="search-mov-label">{`${movie.title}`}</h1>
-                                <button className="search-buy-button" disabled={cart.has(movie.id)} onClick={() => setCart((prevCart) => prevCart.set(movie.id, movie))}>{cart.has(movie.id) ? "Added" : "Buy"}</button>
+                                <button className="search-buy-button" disabled={cart.has(movie.id) || purchaseHistory?.hasOwnProperty(movie.id)} onClick={() => setCart((prevCart) => prevCart.set(movie.id, movie))}>{cart.has(movie.id) ? "Added" : purchaseHistory?.hasOwnProperty(movie.id) ? "Purchased" : "Buy"}</button>
                             </div>
                         ))}
                     </div>
