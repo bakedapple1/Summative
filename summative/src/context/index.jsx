@@ -21,10 +21,10 @@ export const StoreProvider = ({ children }) => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 setCurrentUser(user);
-                setLoading(false);
             } else {
                 setCurrentUser(null);
             }
+            setLoading(false);
         });
     }, []);
 
