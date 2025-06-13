@@ -4,13 +4,16 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useStoreContext } from "../context";
 import ImgNotAvail from "../assets/img not avail.png";
 import "./GenreView.css";
+import { firestore } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 function GenreView() {
     const navigate = useNavigate();
     const location = useLocation();
     const param = useParams();
-    const { pageNum, setPageNum, cart, setCart, setPrevPage } = useStoreContext();
+    const { currentUser, pageNum, setPageNum, cart, setCart, setPrevPage } = useStoreContext();
     const [genreMovies, setGenreMovies] = useState();
+    const [purchaseHistory, setPurchaseHistory] = useState();
 
     function changePageBy(changeBy) {
         if (pageNum + changeBy < 1) {
@@ -27,9 +30,21 @@ function GenreView() {
             const moviesData = (await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${import.meta.env.VITE_TMDB_KEY}&include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_genres=${param.genre_id}&page=${pageNum}`)).data.results;
             setGenreMovies([...moviesData]);
         };
-
         getData();
     }, [pageNum, param.genre_id]);
+
+    useEffect(() => {
+        async function getPurchaseHistory() {
+            try {
+                const docRef = doc(firestore, "users", currentUser.email);
+                const docSnap = await getDoc(docRef);
+                setPurchaseHistory(docSnap.data().previousPurchases);
+            } catch (error) {
+                console.log("Error fetching purchase history:", error);
+            }
+        };
+        getPurchaseHistory();
+    }, []);
 
     function navigateTo(page) {
         setPrevPage(location.pathname);
@@ -44,7 +59,7 @@ function GenreView() {
                         <div className="gen-mov" key={movie.id}>
                             <img className="gen-mov-poster" src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : ImgNotAvail} key={`${movie.id}`} onClick={() => navigateTo(`/movies/details/${movie.id}`)} />
                             <h1 className="gen-mov-label">{`${movie.title}`}</h1>
-                            <button className="buy-button" disabled={cart.has(movie.id)} onClick={() => setCart((prevCart) => prevCart.set(movie.id, movie))}>{cart.has(movie.id) ? "Added" : "Buy"}</button>
+                            <button className="buy-button" disabled={cart.has(movie.id) || purchaseHistory?.hasOwnProperty(movie.id)} onClick={() => setCart((prevCart) => prevCart.set(movie.id, movie))}>{cart.has(movie.id) ? "Added" : purchaseHistory?.hasOwnProperty(movie.id) ? "Purchased" : "Buy"}</button>
                         </div>
                     ))}
                 </div>

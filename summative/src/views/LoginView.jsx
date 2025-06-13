@@ -44,7 +44,7 @@ function LoginView() {
                 const docRef = doc(firestore, "users", result.user.email);
                 await setDoc(docRef, data);
             } else {
-                console.log("LoginView.jsx GoogleSignIn error");
+                console.log("Defualt genres not used, user already exists.");
             }
             navigate(`/movies/genre/${selectedGenre}`);
         } catch (error) {

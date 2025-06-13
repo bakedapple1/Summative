@@ -6,15 +6,16 @@ import { auth } from "../firebase";
 const StoreContext = createContext();
 
 export const StoreProvider = ({ children }) => {
-    const [currentUser, setCurrentUser] = useState();
-    const [toggleState, setToggleState] = useState(Array(12).fill(false));
-    const [selectedGenre, setSelectedGenre] = useState("*");
-    const [pageNum, setPageNum] = useState(1);
-    const [searchPageNum, setSearchPageNum] = useState(1);
     const [cart, setCart] = useState(Map());
-    const [query, setQuery] = useState("");
-    const [prevPage, setPrevPage] = useState("");
+    const [currentUser, setCurrentUser] = useState();
     const [loading, setLoading] = useState(true);
+    const [pageNum, setPageNum] = useState(1);
+    const [prevPage, setPrevPage] = useState("");
+    const [purchaseHistory, setPurchaseHistory] = useState(Map());
+    const [query, setQuery] = useState("");
+    const [searchPageNum, setSearchPageNum] = useState(1);
+    const [selectedGenre, setSelectedGenre] = useState("*");
+    const [toggleState, setToggleState] = useState(Array(12).fill(false));
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
@@ -28,7 +29,7 @@ export const StoreProvider = ({ children }) => {
     }, []);
 
     return (
-        <StoreContext.Provider value={{ currentUser, setCurrentUser, toggleState, setToggleState, selectedGenre, setSelectedGenre, pageNum, setPageNum, searchPageNum, setSearchPageNum, cart, setCart, query, setQuery, prevPage, setPrevPage, loading }}>
+        <StoreContext.Provider value={{ currentUser, setCurrentUser, toggleState, setToggleState, selectedGenre, setSelectedGenre, pageNum, setPageNum, searchPageNum, setSearchPageNum, cart, setCart, query, setQuery, prevPage, setPrevPage, loading, purchaseHistory, setPurchaseHistory }}>
             {children}
         </StoreContext.Provider>
     )
