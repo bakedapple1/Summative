@@ -1,18 +1,24 @@
 import { useEffect, useState } from "react";
 import { useStoreContext } from "../context/index.jsx";
+import { useLocation, useNavigate } from "react-router-dom";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { updateProfile, updatePassword } from "firebase/auth";
 import { auth, firestore } from "../firebase";
+import ImgNotAvail from "../assets/img not avail.png";
 import Header from "../components/Header.jsx";
 import Footer from "../components/Footer.jsx";
 import "./SettingsView.css";
 
+
 function SettingsView() {
-    const { currentUser, setCurrentUser, setPageNum, setToggleState, setSelectedGenre } = useStoreContext();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { currentUser, setCurrentUser, setPageNum, setToggleState, setSelectedGenre, setPrevPage } = useStoreContext();
     const [newFirstName, setNewFirstName] = useState("");
     const [newLastName, setNewLastName] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [preferredGenres, setPreferredGenres] = useState([]);
+    const [previousPurchases, setPreviousPurchases] = useState([]);
     const [genresArray] = useState([
         { genre: "Action", id: 28 },
         { genre: "Adventure", id: 12 },
@@ -35,6 +41,7 @@ function SettingsView() {
 
             if (docSnap.exists()) {
                 setPreferredGenres(docSnap.data().preferredGenres);
+                setPreviousPurchases(Object.values(docSnap.data().previousPurchases || {}));
             } else {
                 console.log("No user data found.");
             }
@@ -88,6 +95,11 @@ function SettingsView() {
         setPreferredGenres(newPreferences);
     }
 
+    function navigateTo(page) {
+        setPrevPage(location.pathname);
+        navigate(page);
+    }
+
     return (
         <div className="settings-view-container">
             <Header />
@@ -120,8 +132,25 @@ function SettingsView() {
                     </div>
                 </div>
                 <input form="settings-form" className="set-save-button" type="submit" value="Save" />
+
+                <div className="set-prev-purchases-container">
+                    <h2 className="set-prev-purchases">Previous Purchases</h2>
+                    {previousPurchases.length === 0 ? (
+                        <div className="set-no-purchases">You have no previous purchases.</div>
+                    ) : (
+                        <div className="set-movies">
+                            {previousPurchases.map(movie => (
+                                <div className="set-mov" key={movie.id}>
+                                    <img className="set-mov-poster" src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : ImgNotAvail} key={`${movie.id}`} onClick={() => navigateTo(`/movies/details/${movie.id}`)} />
+                                    <h1 className="set-mov-label">{`${movie.title}`}</h1>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                </div>
             </div >
-        <Footer />
+            <Footer />
         </div >
     );
 }
