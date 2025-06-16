@@ -25,6 +25,9 @@ function Genres() {
     const [filteredGenres, setFilteredGenres] = useState([]);
 
     useEffect(() => {
+        if (!currentUser) {
+            return;
+        }
         async function fetchUserData() {
             const docRef = doc(firestore, "users", currentUser.email);
             const docSnap = await getDoc(docRef);
@@ -36,8 +39,9 @@ function Genres() {
                 console.log("No user data found.");
             }
         }
+
         fetchUserData();
-    }, []);
+    }, [currentUser]);
 
     function toggleGenre(buttonIdx) {
         const newToggleState = Array(filteredGenres.length).fill(false);

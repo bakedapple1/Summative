@@ -8,7 +8,7 @@ import "./SearchView.css";
 function SearchView() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { searchPageNum, setSearchPageNum, cart, setCart, query, setPrevPage, purchaseHistory } = useStoreContext();
+    const { searchPageNum, setSearchPageNum, cart, setCart, query, setPrevPage, purchaseHistory, selectedGenre } = useStoreContext();
     const [searchRes, setSearchRes] = useState([]);
     const [waitMsg, setWaitMsg] = useState([]);
 
@@ -82,6 +82,7 @@ function SearchView() {
                 <button className={(searchPageNum != 500) ? "active-page-button" : "inactive-page-button"} onClick={() => changePageBy(1)}>Next</button>
                 <button className={(searchPageNum != 500) ? "active-ten-page-button" : "inactive-ten-page-button"} onClick={() => changePageBy(10)}>&gt;&gt;</button>
             </div >
+            <div className="det-return" onClick={() => navigate(`/movies/genre/${selectedGenre}`)}>&times;</div>
         </div>
     );
 }

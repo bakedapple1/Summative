@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useStoreContext } from "../context/index.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { updateProfile, updatePassword } from "firebase/auth";
 import { auth, firestore } from "../firebase";
 import ImgNotAvail from "../assets/img not avail.png";
@@ -13,7 +13,7 @@ import "./SettingsView.css";
 function SettingsView() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { currentUser, setCurrentUser, setPageNum, setToggleState, setSelectedGenre, setPrevPage, purchaseHistory } = useStoreContext();
+    const { currentUser, setCurrentUser, setPageNum, setToggleState, selectedGenre, setSelectedGenre, setPrevPage, purchaseHistory } = useStoreContext();
     const [newFirstName, setNewFirstName] = useState("");
     const [newLastName, setNewLastName] = useState("");
     const [newPassword, setNewPassword] = useState("");
@@ -32,6 +32,24 @@ function SettingsView() {
         { genre: "War", id: 10752 },
         { genre: "Western", id: 37 }
     ]);
+
+    useEffect(() => {
+        if (!currentUser) {
+            return;
+        }
+        async function fetchPreferredGenres() {
+            const docRef = doc(firestore, "users", currentUser.email);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                setPreferredGenres(docSnap.data().preferredGenres || Array(12).fill(false));
+            } else {
+                setPreferredGenres(Array(12).fill(false));
+            }
+        }
+
+        fetchPreferredGenres();
+    }, [currentUser]);
 
     async function updateUser() {
         try {
@@ -134,6 +152,7 @@ function SettingsView() {
 
                 </div>
             </div >
+            <div className="set-return" onClick={() => navigate(`/movies/genre/${selectedGenre}`)}>&times;</div>
             <Footer />
         </div >
     );

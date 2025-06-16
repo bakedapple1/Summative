@@ -8,7 +8,7 @@ import Footer from "../components/Footer.jsx";
 import './CartView.css';
 
 function CartView() {
-    const { currentUser, cart, setCart, setPrevPage } = useStoreContext();
+    const { currentUser, cart, setCart, selectedGenre, setPrevPage } = useStoreContext();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -56,6 +56,7 @@ function CartView() {
                     </div>
                 )}
             </div>
+            <div className="cart-return" onClick={() => navigate(`/movies/genre/${selectedGenre}`)}>&times;</div>
             <Footer />
         </div>
     );
