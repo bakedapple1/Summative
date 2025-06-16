@@ -8,7 +8,7 @@ import "./SearchView.css";
 function SearchView() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { currentUser, searchPageNum, setSearchPageNum, cart, setCart, query, setPrevPage, purchaseHistory } = useStoreContext();
+    const { searchPageNum, setSearchPageNum, cart, setCart, query, setPrevPage, purchaseHistory } = useStoreContext();
     const [searchRes, setSearchRes] = useState([]);
     const [waitMsg, setWaitMsg] = useState([]);
 

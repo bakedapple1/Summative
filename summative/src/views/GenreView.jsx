@@ -9,7 +9,7 @@ function GenreView() {
     const navigate = useNavigate();
     const location = useLocation();
     const param = useParams();
-    const { currentUser, pageNum, setPageNum, cart, setCart, setPrevPage, purchaseHistory } = useStoreContext();
+    const { pageNum, setPageNum, cart, setCart, setPrevPage, purchaseHistory } = useStoreContext();
     const [genreMovies, setGenreMovies] = useState();
 
     function changePageBy(changeBy) {

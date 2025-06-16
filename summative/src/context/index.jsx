@@ -28,6 +28,21 @@ export const StoreProvider = ({ children }) => {
         });
     }, []);
 
+    useEffect(() => {
+        if (!currentUser) {
+            return;
+        }
+        const storedCart = localStorage.getItem(`${currentUser.email}-cart`);
+        setCart(storedCart ? Map(JSON.parse(storedCart)) : Map());
+    }, [currentUser]);
+
+    useEffect(() => {
+        if (!currentUser) {
+            return;
+        }
+        localStorage.setItem(`${currentUser.email}-cart`, JSON.stringify(cart.toJS()));
+    }, [cart]);
+
     return (
         <StoreContext.Provider value={{ currentUser, setCurrentUser, toggleState, setToggleState, selectedGenre, setSelectedGenre, pageNum, setPageNum, searchPageNum, setSearchPageNum, cart, setCart, query, setQuery, prevPage, setPrevPage, purchaseHistory, setPurchaseHistory, loading }}>
             {children}

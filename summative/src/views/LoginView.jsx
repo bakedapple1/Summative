@@ -43,8 +43,6 @@ function LoginView() {
                 const data = { preferredGenres: Array(5).fill(true).concat(Array(7).fill(false)) };
                 const docRef = doc(firestore, "users", result.user.email);
                 await setDoc(docRef, data);
-            } else {
-                console.log("Defualt genres not used, user already exists.");
             }
             navigate(`/movies/genre/${selectedGenre}`);
         } catch (error) {

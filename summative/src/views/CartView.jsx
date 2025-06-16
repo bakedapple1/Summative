@@ -46,7 +46,7 @@ function CartView() {
                                     <div className="cart-item" key={key}>
                                         <img className="cart-poster" src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} onClick={() => navigateTo(`/movies/details/${movie.id}`)} />
                                         <h1 className="cart-mov-title">{movie.title}</h1>
-                                        <button className="remove-button" onClick={() => setCart((prevCart) => prevCart.delete(movie.id))}>
+                                        <button className="remove-button" onClick={() => setCart((prevCart) => prevCart.delete(key))}>
                                             Remove
                                         </button>
                                     </div>
