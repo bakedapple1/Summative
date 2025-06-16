@@ -75,7 +75,7 @@ function SettingsView() {
         }
     }
 
-    async function updateAccount(event) {
+    async function handleUpdate(event) {
         event.preventDefault();
 
         if (preferredGenres.filter(Boolean).length < 5) {
@@ -107,7 +107,7 @@ function SettingsView() {
             <Header />
             <div className="settings-container">
                 <h1 className="settings-title">Settings</h1>
-                <form className="settings-form" id="settings-form" onSubmit={(event) => { updateAccount(event) }}>
+                <form className="settings-form" id="settings-form" onSubmit={(event) => { handleUpdate(event) }}>
                     <div className="set-email">{`Email: ${currentUser.email}`}</div>
                     <label htmlFor="set-first-name" className="set-input-label">First Name:</label>
                     <input type="text" name="set-first-name" className="set-input" id="set-first-name" placeholder={currentUser.displayName.split(" ")[0]} value={newFirstName} onChange={(event) => { setNewFirstName(event.target.value) }} />
