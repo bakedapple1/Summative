@@ -32,6 +32,9 @@ function Header() {
 
     useEffect(() => {
         async function getPurchaseHistory() {
+            if (!currentUser) {
+                return;
+            }
             try {
                 const docRef = doc(firestore, "users", currentUser.email);
                 const docSnap = await getDoc(docRef);
@@ -41,7 +44,7 @@ function Header() {
             }
         };
         getPurchaseHistory();
-    }, []);
+    }, [currentUser]);
 
     return (
         <div className="nav-bar">
