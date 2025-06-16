@@ -62,6 +62,10 @@ function RegisterView() {
         }
 
         try {
+            if (userInfo.firstName.length + userInfo.lastName.length > 256) {
+                alert("Please use a shorter name.");
+                return;
+            }
             const result = await createUserWithEmailAndPassword(auth, userInfo.email, userInfo.password);
             await updateProfile(result.user, {
                 displayName: `${userInfo.firstName} ${userInfo.lastName}`

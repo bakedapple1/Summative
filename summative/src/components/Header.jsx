@@ -22,7 +22,7 @@ function Header() {
                 const docSnap = await getDoc(docRef);
                 setPurchaseHistory(docSnap.data().previousPurchases);
             } catch (error) {
-                console.log("Error fetching purchase history:", error);
+                console.log("No purchase history found", error);
             }
         };
 

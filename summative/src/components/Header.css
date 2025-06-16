@@ -102,6 +102,12 @@
     align-self: center;
     justify-self: left;
     margin-right: 30px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: auto;
+    max-width: 250px;
+    text-align: right;
 }
 
 .log-out,
