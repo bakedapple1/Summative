@@ -4,16 +4,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useStoreContext } from "../context";
 import ImgNotAvail from "../assets/img not avail.png";
 import "./SearchView.css";
-import { doc, getDoc } from "firebase/firestore";
-import { firestore } from "../firebase";
 
 function SearchView() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { currentUser, searchPageNum, setSearchPageNum, cart, setCart, query, setPrevPage } = useStoreContext();
+    const { currentUser, searchPageNum, setSearchPageNum, cart, setCart, query, setPrevPage, purchaseHistory } = useStoreContext();
     const [searchRes, setSearchRes] = useState([]);
     const [waitMsg, setWaitMsg] = useState([]);
-    const [purchaseHistory, setPurchaseHistory] = useState();
 
     useEffect(() => {
         setSearchRes([]);
@@ -38,19 +35,6 @@ function SearchView() {
 
         return () => clearTimeout(timer);
     }, [searchPageNum, query]);
-
-    useEffect(() => {
-        async function getPurchaseHistory() {
-            try {
-                const docRef = doc(firestore, "users", currentUser.email);
-                const docSnap = await getDoc(docRef);
-                setPurchaseHistory(docSnap.data().previousPurchases);
-            } catch (error) {
-                console.log("Error fetching purchase history:", error);
-            }
-        };
-        getPurchaseHistory();
-    }, []);
 
     function changePageBy(changeBy) {
         if (searchPageNum + changeBy < 1) {

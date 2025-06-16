@@ -4,16 +4,13 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useStoreContext } from "../context";
 import ImgNotAvail from "../assets/img not avail.png";
 import "./GenreView.css";
-import { firestore } from "../firebase";
-import { doc, getDoc } from "firebase/firestore";
 
 function GenreView() {
     const navigate = useNavigate();
     const location = useLocation();
     const param = useParams();
-    const { currentUser, pageNum, setPageNum, cart, setCart, setPrevPage } = useStoreContext();
+    const { currentUser, pageNum, setPageNum, cart, setCart, setPrevPage, purchaseHistory } = useStoreContext();
     const [genreMovies, setGenreMovies] = useState();
-    const [purchaseHistory, setPurchaseHistory] = useState();
 
     function changePageBy(changeBy) {
         if (pageNum + changeBy < 1) {
@@ -32,19 +29,6 @@ function GenreView() {
         };
         getData();
     }, [pageNum, param.genre_id]);
-
-    useEffect(() => {
-        async function getPurchaseHistory() {
-            try {
-                const docRef = doc(firestore, "users", currentUser.email);
-                const docSnap = await getDoc(docRef);
-                setPurchaseHistory(docSnap.data().previousPurchases);
-            } catch (error) {
-                console.log("Error fetching purchase history:", error);
-            }
-        };
-        getPurchaseHistory();
-    }, []);
 
     function navigateTo(page) {
         setPrevPage(location.pathname);

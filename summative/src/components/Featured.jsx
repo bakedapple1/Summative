@@ -3,15 +3,12 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useStoreContext } from "../context";
 import "./Featured.css";
-import { firestore } from "../firebase";
-import { doc, getDoc } from "firebase/firestore";
 
 function Featured() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { currentUser, setPrevPage, cart, setCart } = useStoreContext();
+    const { currentUser, setPrevPage, cart, setCart, purchaseHistory } = useStoreContext();
     const [sixMovies, setSixMovies] = useState([]);
-    const [purchaseHistory, setPurchaseHistory] = useState();
 
     useEffect(() => {
         async function getData() {
@@ -25,19 +22,6 @@ function Featured() {
         };
 
         getData();
-    }, []);
-
-    useEffect(() => {
-        async function getPurchaseHistory() {
-            try {
-                const docRef = doc(firestore, "users", currentUser.email);
-                const docSnap = await getDoc(docRef);
-                setPurchaseHistory(docSnap.data().previousPurchases);
-            } catch (error) {
-                console.log("Error fetching purchase history:", error);
-            }
-        };
-        getPurchaseHistory();
     }, []);
 
     function navigateTo(page) {

@@ -15,6 +15,7 @@ export const StoreProvider = ({ children }) => {
     const [searchPageNum, setSearchPageNum] = useState(1);
     const [selectedGenre, setSelectedGenre] = useState("*");
     const [toggleState, setToggleState] = useState(Array(12).fill(false));
+    const [purchaseHistory, setPurchaseHistory] = useState([]);
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
@@ -28,7 +29,7 @@ export const StoreProvider = ({ children }) => {
     }, []);
 
     return (
-        <StoreContext.Provider value={{ currentUser, setCurrentUser, toggleState, setToggleState, selectedGenre, setSelectedGenre, pageNum, setPageNum, searchPageNum, setSearchPageNum, cart, setCart, query, setQuery, prevPage, setPrevPage, loading }}>
+        <StoreContext.Provider value={{ currentUser, setCurrentUser, toggleState, setToggleState, selectedGenre, setSelectedGenre, pageNum, setPageNum, searchPageNum, setSearchPageNum, cart, setCart, query, setQuery, prevPage, setPrevPage, purchaseHistory, setPurchaseHistory, loading }}>
             {children}
         </StoreContext.Provider>
     )

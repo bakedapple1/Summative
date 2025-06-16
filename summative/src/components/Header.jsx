@@ -1,13 +1,16 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import { useStoreContext } from "../context";
 import SearchIcon from "../assets/search-icon.png";
 import "./Header.css";
+import { firestore } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 function Header() {
     const navigate = useNavigate();
     const auth = getAuth();
-    const { currentUser, setCurrentUser, cart, query, setQuery } = useStoreContext();
+    const { currentUser, setCurrentUser, cart, query, setQuery, purchaseHistory, setPurchaseHistory } = useStoreContext();
 
     async function logOut() {
         try {
@@ -23,9 +26,22 @@ function Header() {
 
     function handleSearch(event) {
         event.preventDefault();
-        console.log(currentUser);
+        console.log(currentUser, purchaseHistory);
         navigate(`/movies/search`);
     }
+
+    useEffect(() => {
+        async function getPurchaseHistory() {
+            try {
+                const docRef = doc(firestore, "users", currentUser.email);
+                const docSnap = await getDoc(docRef);
+                setPurchaseHistory(docSnap.data().previousPurchases);
+            } catch (error) {
+                console.log("Error fetching purchase history:", error);
+            }
+        };
+        getPurchaseHistory();
+    }, []);
 
     return (
         <div className="nav-bar">

@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useStoreContext } from "../context/index.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { updateProfile, updatePassword } from "firebase/auth";
 import { auth, firestore } from "../firebase";
 import ImgNotAvail from "../assets/img not avail.png";
@@ -13,12 +13,11 @@ import "./SettingsView.css";
 function SettingsView() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { currentUser, setCurrentUser, setPageNum, setToggleState, setSelectedGenre, setPrevPage } = useStoreContext();
+    const { currentUser, setCurrentUser, setPageNum, setToggleState, setSelectedGenre, setPrevPage, purchaseHistory } = useStoreContext();
     const [newFirstName, setNewFirstName] = useState("");
     const [newLastName, setNewLastName] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [preferredGenres, setPreferredGenres] = useState([]);
-    const [previousPurchases, setPreviousPurchases] = useState([]);
     const [genresArray] = useState([
         { genre: "Action", id: 28 },
         { genre: "Adventure", id: 12 },
@@ -33,21 +32,6 @@ function SettingsView() {
         { genre: "War", id: 10752 },
         { genre: "Western", id: 37 }
     ]);
-
-    useEffect(() => {
-        async function fetchUserData() {
-            const docRef = doc(firestore, "users", currentUser.email);
-            const docSnap = await getDoc(docRef);
-
-            if (docSnap.exists()) {
-                setPreferredGenres(docSnap.data().preferredGenres);
-                setPreviousPurchases(Object.values(docSnap.data().previousPurchases || {}));
-            } else {
-                console.log("No user data found.");
-            }
-        }
-        fetchUserData();
-    }, []);
 
     async function updateUser() {
         try {
@@ -135,11 +119,11 @@ function SettingsView() {
 
                 <div className="set-prev-purchases-container">
                     <h2 className="set-prev-purchases">Previous Purchases</h2>
-                    {previousPurchases.length === 0 ? (
+                    {!purchaseHistory ? (
                         <div className="set-no-purchases">You have no previous purchases.</div>
                     ) : (
                         <div className="set-movies">
-                            {previousPurchases.map(movie => (
+                            {Object.values(purchaseHistory).map(movie => (
                                 <div className="set-mov" key={movie.id}>
                                     <img className="set-mov-poster" src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : ImgNotAvail} key={`${movie.id}`} onClick={() => navigateTo(`/movies/details/${movie.id}`)} />
                                     <h1 className="set-mov-label">{`${movie.title}`}</h1>
