@@ -53,8 +53,9 @@ function SettingsView() {
 
     async function updateUser() {
         try {
-            const data = { preferredGenres: preferredGenres, previousPurchases: purchaseHistory };
+            const data = { preferredGenres, ...(purchaseHistory && { previousPurchases: purchaseHistory }) };
             const docRef = doc(firestore, "users", currentUser.email);
+            console.log(data);
             await setDoc(docRef, data);
             await updateProfile(currentUser, {
                 displayName: `${newFirstName || currentUser.displayName.split(" ")[0]} ${newLastName || currentUser.displayName.split(" ")[1]}`
