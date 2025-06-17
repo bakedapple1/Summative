@@ -53,7 +53,7 @@ function SettingsView() {
 
     async function updateUser() {
         try {
-            const data = { preferredGenres: preferredGenres };
+            const data = { preferredGenres: preferredGenres, previousPurchases: purchaseHistory };
             const docRef = doc(firestore, "users", currentUser.email);
             await setDoc(docRef, data);
             await updateProfile(currentUser, {
