@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword, updateProfile, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile, signInWithPopup, GoogleAuthProvider, getAdditionalUserInfo } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { firestore, auth } from "../firebase";
 import { useStoreContext } from "../context";
@@ -70,7 +70,7 @@ function RegisterView() {
             await updateProfile(result.user, {
                 displayName: `${userInfo.firstName} ${userInfo.lastName}`
             });
-            createUserDoc(result, selectedGenres);
+            await createUserDoc(result, selectedGenres);
             setCurrentUser(result.user);
             alert("Account successfully created.");
             navigate(`/movies/genre/${selectedGenre}`);
@@ -96,7 +96,11 @@ function RegisterView() {
 
         try {
             const result = await signInWithPopup(auth, provider);
-            createUserDoc(result, Array(5).fill(true).concat(Array(7).fill(false)));
+            const userInfo = getAdditionalUserInfo(result);
+            if (userInfo.isNewUser) {
+                await createUserDoc(result, Array(5).fill(true).concat(Array(7).fill(false)));
+            }
+            console.dir(result, { depth: null });
             setCurrentUser(result.user);
             navigate(`/movies/genre/${selectedGenre}`);
         } catch (error) {
